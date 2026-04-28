@@ -65,11 +65,12 @@ export default function DashboardPage() {
       const newFile = {
         id: result.id,
         originalName: file.name,
-        fileName: result.storagePath.split('/').pop(),
-        mimeType: file.type,
+        fileName: file.name,
+        mimeType: file.type || result.resourceType || 'application/octet-stream',
         size: file.size,
         storageUrl: result.downloadURL,
-        storagePath: result.storagePath,
+        cloudinaryPublicId: result.publicId,
+        cloudinaryResourceType: result.resourceType,
         createdAt: { toDate: () => new Date() },
         ownerId: user.uid,
       };
