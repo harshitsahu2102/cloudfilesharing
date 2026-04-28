@@ -14,7 +14,7 @@ export default function ShareModal({ file, uid, onClose }) {
     try {
       const token = await createShareLink({
         fileId: file.id,
-        fileName: file.fileName,
+        fileName: file.originalName,
         originalName: file.originalName,
         storageUrl: file.storageUrl,
         mimeType: file.mimeType,
