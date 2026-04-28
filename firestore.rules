@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users: only the owner can read/write their profile
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Files: only the owner can create/read/delete
+    match /files/{fileId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.ownerId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.ownerId;
+    }
+
+    // Share Links: 
+    //   - Authenticated users can create and delete their own links
+    //   - Anyone (including unauthenticated) can read links (needed for public share page)
+    match /shareLinks/{linkId} {
+      allow read: if true;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.ownerId;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.ownerId;
+      allow update: if request.auth != null && request.auth.uid == resource.data.ownerId;
+    }
+  }
+}
